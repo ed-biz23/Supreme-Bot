@@ -30,4 +30,4 @@ if __name__ == '__main__':
 
     # Don't make any changes here
     print(datetime.datetime.now().strftime('%x %X'), 'Starting the script')
-    main(category, name, color, size, checkoutDelay, url)
+    main(category, name, color, size, checkoutDelay, url) 
