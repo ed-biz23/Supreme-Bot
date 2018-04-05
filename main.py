@@ -12,4 +12,4 @@ if __name__ == '__main__':
     size = 'medium'              #size
     checkoutDelay = None        #delay to avoid possible ghost checkout
 
-    main(category, name, color, size, checkoutDelay)
+    main(category, name, color, size, checkoutDelay) 
