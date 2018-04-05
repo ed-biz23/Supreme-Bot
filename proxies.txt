@@ -1,0 +1,5 @@
+ip:port <<= if ip authenticated
+http://username:password@ip:port <<= if username/password authentication
+
+**must enter each ip:port or http://username:password@ip:port in a new line**
+**If not using any proxies please leave this txt file blank**
