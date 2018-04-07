@@ -59,7 +59,7 @@ class Supreme(object):
     def search(self):
         def checkMatch(url):
             try:
-                r = requests.get(url, headers=self.headers, proxies={'http': random.choice(self.proxies)})
+                r = requests.get(url, headers=self.headers, proxies={'http': random.choice(self.proxies)} if self.proxies else None)
                 tree = etree.HTML(r.content)
                 return tree.xpath('/html/head/title')[0].text, url
             except Exception as e:
@@ -70,7 +70,7 @@ class Supreme(object):
             try:
                 print(datetime.datetime.now().strftime('%x %X'), 'Searching')
                 r = requests.get('http://www.supremenewyork.com/shop/all/{}'.format(self.category), headers=self.headers,
-                                 proxies={'http': random.choice(self.proxies)})
+                                 proxies={'http': random.choice(self.proxies)} if self.proxies else None)
                 tree = etree.HTML(r.content)
                 if not self.urls:
                     for products in tree.xpath('//*[@id="container"]/article/div/a'):
@@ -95,7 +95,7 @@ class Supreme(object):
             while True:
                 try:
                     print(datetime.datetime.now().strftime('%x %X'), 'Waiting for restock')
-                    r = requests.get(url, headers=self.headers, proxies={'http': random.choice(self.proxies)})
+                    r = requests.get(url, headers=self.headers, proxies={'http': random.choice(self.proxies)} if self.proxies else None)
                     tree = etree.HTML(r.content)
                     if tree.xpath('//*[@id="add-remove-buttons"]/input'):
                         avlSz = [sizes for sizes in tree.xpath('//*[@id="s"]/option/text()')] if tree.xpath('//*[@id="s"]/option/text()') else ['N/A']
