@@ -18,6 +18,7 @@ class Supreme(object):
     def __init__(self, category, name, color, size, delay):
         self.headers = {'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_1_2 like Mac OS X) AppleWebKit/604.3.5 (KHTML, like Gecko) Mobile/15B202'}
         self.proxies = [line.rstrip('\n') for line in open('proxies.txt', 'r')]
+        self.urls = []
 
         self.category = category.lower() if category else None
         self.prodName = name.lower() if name else None
@@ -71,14 +72,21 @@ class Supreme(object):
                 r = requests.get('http://www.supremenewyork.com/shop/all/{}'.format(self.category), headers=self.headers,
                                  proxies={'http': random.choice(self.proxies)})
                 tree = etree.HTML(r.content)
-                with cf.ThreadPoolExecutor() as pool:
-                    futures = []
+                if not self.urls:
                     for products in tree.xpath('//*[@id="container"]/article/div/a'):
-                        futures.append(pool.submit(checkMatch, 'http://www.supremenewyork.com'+products.get('href')))
-                    for x in futures:
-                        if x.result():
-                            if self.prodName in x.result()[0].lower() and self.color in x.result()[0].lower():
-                                return x.result()[1]
+                        self.urls.append('http://www.supremenewyork.com'+products.get('href'))
+                    print(self.urls)
+                else:
+                    with cf.ThreadPoolExecutor() as pool:
+                        futures = []
+                        for products in tree.xpath('//*[@id="container"]/article/div/a'):
+                            if 'http://www.supremenewyork.com'+products.get('href') not in self.urls:
+                                futures.append(pool.submit(checkMatch, 'http://www.supremenewyork.com'+products.get('href')))
+                        if futures:
+                            for x in futures:
+                                if x.result():
+                                    if self.prodName in x.result()[0].lower() and self.color in x.result()[0].lower():
+                                        return x.result()[1]
                 time.sleep(0.5)
             except Exception as e:
                 print(e)
