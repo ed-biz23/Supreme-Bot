@@ -27,6 +27,7 @@ class Supreme(object):
         self.delay = delay if delay else 0
 
         options = webdriver.ChromeOptions()
+        options.add_argument('disable-infobars')
         options.add_argument('--disable-extensions')
         # options.add_argument('--headless')
         options.add_argument('--disable-gpu')
@@ -36,7 +37,8 @@ class Supreme(object):
             self.driver = webdriver.Chrome('./bin/chromedriver', chrome_options=options)
         else:
             self.driver = webdriver.Chrome('./bin/chromedriver.exe', chrome_options=options)
-        self.driver.get('https://www.google.com')
+        self.driver.set_window_size(0,0)
+        self.driver.get('http://www.supremenewyork.com/shop/all')
         for cookie in json.load(open('gmail.json')):
             self.driver.add_cookie(cookie)
         self.wait = WebDriverWait(self.driver, 10)
@@ -106,6 +108,7 @@ class Supreme(object):
                     print(e)
 
     def addToCart(self, url):
+        self.driver.maximize_window()
         print(datetime.datetime.now().strftime('%x %X'), 'Adding to cart')
         try:
             self.driver.get(url)
