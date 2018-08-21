@@ -1,4 +1,6 @@
 # Supreme-Bot
+<strong>OUTDATED</strong>
+
 Simple Supreme Bot, made with combination of requests and selenium.
 <H3>Requirements</H3>
 <ul>
